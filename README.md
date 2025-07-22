@@ -7,4 +7,4 @@ P3
 -Optimized Waiter into starvation free by making sure every Philosopher has chance
 -optimized ram usage 
 P4
--Optimized everything by adding sleep cycle
+-Optimized everything by adding sleep cycle max 20 and can be set in the code
