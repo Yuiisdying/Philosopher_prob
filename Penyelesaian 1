@@ -1,0 +1,35 @@
+#include <stdio.h>
+#include <pthread.h>
+#include <unistd.h>
+#define NUM_PHILOSOPHERS 5
+pthread_mutex_t table; // Global mutex (only 1 philosopher eats at a time)
+void *philosopher(void *arg) {
+ int id = *(int *)arg;
+ while (1) {
+ // Thinking
+ printf("Philosopher %d is thinking...\n", id);
+ sleep(1);
+ // Request exclusive access to the table
+ pthread_mutex_lock(&table);
+ // Eating
+ printf("Philosopher %d is eating...\n", id);
+ sleep(1);
+ // Release the table
+ pthread_mutex_unlock(&table);
+ }
+ return NULL;
+}
+int main() {
+ pthread_t philosophers[NUM_PHILOSOPHERS];
+ int ids[NUM_PHILOSOPHERS];
+ pthread_mutex_init(&table, NULL);
+ for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+ ids[i] = i;
+ pthread_create(&philosophers[i], NULL, philosopher, &ids[i]);
+ }
+ for (int i = 0; i < NUM_PHILOSOPHERS; i++) {
+ pthread_join(philosophers[i], NULL);
+ }
+ pthread_mutex_destroy(&table);
+ return 0;
+}
